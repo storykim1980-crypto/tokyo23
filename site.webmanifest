@@ -1,0 +1,21 @@
+{
+ "name": "TOKYO 23",
+ "short_name": "TOKYO 23",
+ "description": "도쿄 23구 230곳과 현지인만 아는 주문법·암묵의 규칙",
+ "start_url": "/",
+ "display": "standalone",
+ "background_color": "#FAF8F3",
+ "theme_color": "#16150F",
+ "icons": [
+  {
+   "src": "/assets/icon-192.png",
+   "sizes": "192x192",
+   "type": "image/png"
+  },
+  {
+   "src": "/assets/icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png"
+  }
+ ]
+}
