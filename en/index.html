@@ -497,10 +497,10 @@
     if(d.t23h){
       var f=document.getElementById('dpIf');
       if(f){
-        var mob=window.matchMedia('(max-width:759px)').matches;
-        var cap=Math.round(window.innerHeight*(mob?1:0.86))-(mob?52:46);
-        // 내용이 짧으면 딱 맞추고, 길면 상한까지만(내부 스크롤)
-        f.style.height=Math.min(d.t23h+6, cap)+'px';
+        // 내용 전체 높이로 늘린다. 상한을 두면 iframe 안에 또 스크롤바가 생겨
+        // 스크롤이 두 겹이 되고 화면이 잘려 보인다(사용자 신고 건).
+        // 대신 오버레이(.detpane) 하나만 스크롤하게 한다.
+        f.style.height=(d.t23h+6)+'px';
       }
     }
     if(d.t23nav){
