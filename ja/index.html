@@ -459,6 +459,10 @@
     var label=btn?(btn.querySelector('.wk')||{}).textContent||wid:wid;
     curWard=wid; curSlug=null; paintFrame('ward', wid, label);
     if(push) history.pushState({wd:wid},'',BP+LGP()+'/ward/'+wid+'.html');
+    // 구 목록은 페이지 위쪽에 있어서, 누른 자리에 그대로 있으면
+    // 오른쪽에 열린 상세가 화면 밖이라 안 보인다. 목록·상세가 함께
+    // 보이는 위치까지 내려 준다.
+    toList();
   }
   function closeSpot(push){
     curSlug=null; curWard=null; paintFrame(null,null,'');

@@ -1492,44 +1492,24 @@ body.dp-open .grid{grid-template-columns:repeat(auto-fill,minmax(190px,1fr))}
    개선: 클릭 즉시 화면 한가운데에 표시. 목록은 뒤에 흐리게 남는다.
    ══════════════════════════════════════════════════════════ */
 
-/* 2단 분할 해제 — 목록은 항상 전체 폭 유지 */
-body.dp-open .splitwrap{grid-template-columns:minmax(0,1fr) !important}
-body.dp-open .grid{grid-template-columns:repeat(auto-fill,minmax(210px,1fr)) !important}
+/* ── 분할 화면 확정 ────────────────────────────────────────
+   요청: "메인 화면과 상세를 한 페이지에서 동시에".
+   이전에는 여기서 중앙 모달로 되돌리고 있었다(새 창처럼 보이던 원인).
+   이제 왼쪽 목록 + 오른쪽 상세를 나란히 두고, 딤·모달을 쓰지 않는다.
+   ══════════════════════════════════════════════════════════ */
 
-/* 배경 딤 */
-body.dp-open::before{content:"";position:fixed;inset:0;z-index:990;
-  background:rgba(22,21,15,.52);backdrop-filter:blur(3px);
-  animation:dpFade .2s ease}
-@keyframes dpFade{from{opacity:0}to{opacity:1}}
+/* 선택한 카드가 어느 것인지 확실히 보이게 */
+.card[aria-current="true"]{border-color:var(--accent);
+  box-shadow:0 0 0 2px var(--accent) inset, 0 8px 24px rgba(22,21,15,.14)}
 
-/* 상세 = 화면 중앙 카드 */
-.detpane.on{position:fixed !important;z-index:1000;
-  top:50%;left:50%;transform:translate(-50%,-50%);
-  width:min(860px, calc(100vw - 40px));
-  max-height:min(88vh, 900px);overflow-y:auto;
-  background:var(--paper);border:1px solid var(--line);border-radius:18px;
-  box-shadow:0 24px 70px rgba(22,21,15,.34);
-  animation:dpUp .24s cubic-bezier(.2,.8,.3,1)}
-@keyframes dpUp{from{opacity:0;transform:translate(-50%,-46%)}
-                to{opacity:1;transform:translate(-50%,-50%)}}
-
-/* 넓은 화면: 사진과 정보를 좌우로 나눠 한눈에 */
-@media(min-width:760px){
-  .detpane.on .dp-hero{aspect-ratio:16/7}
-  .dp-facts{grid-template-columns:repeat(auto-fit,minmax(140px,1fr))}
+/* 상세 안쪽 여백·타이포 (분할 폭에 맞춘 값) */
+.dp-facts{grid-template-columns:repeat(auto-fit,minmax(130px,1fr))}
+.dp-tips{grid-template-columns:minmax(0,1fr)}
+.dp-body{padding:16px 18px 22px}
+.dp-htx h2{font-size:21px}
+@media(min-width:1400px){
   .dp-tips{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .dp-body{padding:18px 22px 24px}
-  .dp-htx h2{font-size:24px}
-}
-.dp-close{background:rgba(250,248,243,.97)}
-
-/* 모바일: 전체 화면 시트 */
-@media(max-width:759px){
-  .detpane.on{top:0;left:0;transform:none;width:100%;max-height:none;
-    height:100%;border:0;border-radius:0;animation:dpSheet .26s cubic-bezier(.3,.8,.4,1)}
-  @keyframes dpSheet{from{transform:translateY(100%)}to{transform:translateY(0)}}
-  body.dp-open::before{display:none}
-  .dp-tips{grid-template-columns:minmax(0,1fr)}
+  .dp-htx h2{font-size:23px}
 }
 
 /* ══════════════════════════════════════════════════════════
@@ -1612,20 +1592,19 @@ body.dp-open::before{content:"";position:fixed;inset:0;z-index:990;
   animation:dpSpin .7s linear infinite}
 @keyframes dpSpin{to{transform:rotate(360deg)}}
 
-/* 스크롤은 오버레이(.detpane) 하나만 갖는다.
+/* 스크롤은 상세 칸(.detpane) 하나만 갖는다.
    iframe 에 고정 높이를 주면 그 안에 두 번째 스크롤바가 생겨
    내용이 좁은 칸에 갇힌 것처럼 보인다(사용자 신고 건). 그래서
    iframe 은 postMessage 로 받은 '내용 전체 높이'만큼 늘어나게 두고,
-   화면을 넘치는 부분은 오버레이가 스크롤한다. */
+   화면을 넘치는 부분은 상세 칸이 스크롤한다.
+   ※ 폭은 .splitwrap 의 그리드가 정한다. 여기서 width 를 지정하면
+     분할 레이아웃이 깨지므로 건드리지 않는다. */
 .detpane.on{overflow-y:auto;-webkit-overflow-scrolling:touch}
-@media(min-width:760px){
-  .detpane.on{width:min(920px, calc(100vw - 40px))}
-}
 
-.dp-frame{overflow:visible;border-radius:0 0 18px 18px}
+.dp-frame{overflow:visible;border-radius:0 0 16px 16px}
 /* height 는 JS 가 내용 높이로 지정한다. 아래 값은 로딩 중 임시값. */
-.dp-frame iframe{height:auto;min-height:60vh}
-@media(max-width:759px){
+.dp-frame iframe{height:auto;min-height:52vh}
+@media(max-width:900px){
   .dp-frame{border-radius:0}
 }
 
