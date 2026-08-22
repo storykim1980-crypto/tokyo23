@@ -1354,22 +1354,20 @@ html[lang="en"] .dtext,html[lang="en"] .dhead h1{
 }
 
 /* ══════════════════════════════════════════════════════════
-   분할 화면 — 목록 + 상세 패널
-   상세 페이지(/spot/*.html)는 그대로 유지한다.
-   목록 클릭 시 오른쪽에 요약을 띄우고 URL 도 함께 바꿔
-   색인·공유·뒤로가기를 모두 지킨다.
+   상세 — 히어로 바로 아래, 화면 전체 폭
+   좌우 분할이나 뜨는 창을 쓰지 않는다(요청).
+   목록은 상세 아래에 그대로 남아 스크롤하면 이어서 보인다.
+   /spot/*.html 정식 페이지와 URL 은 그대로 유지된다.
    ══════════════════════════════════════════════════════════ */
-.splitwrap{display:grid;grid-template-columns:minmax(0,1fr);gap:20px;align-items:start}
+.detwrap{padding:0 0 6px;background:var(--band);
+  border-bottom:1px solid var(--line)}
+.detwrap[hidden]{display:none}
 .detpane{display:none}
-
-/* 상세가 열리면 2단으로 전환 */
-body.dp-open .splitwrap{grid-template-columns:minmax(0,1fr) minmax(0,460px)}
-body.dp-open .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 body.dp-open .detpane{display:block}
 
-.detpane.on{position:sticky;top:112px;max-height:calc(100vh - 132px);
-  overflow-y:auto;background:var(--paper);border:1px solid var(--line);
-  border-radius:16px;scrollbar-width:thin}
+.detpane.on{position:relative;background:var(--paper);
+  border:1px solid var(--line);border-radius:16px;
+  margin:18px 0 20px;overflow:hidden}
 .dp-close{position:sticky;top:0;z-index:5;width:100%;display:flex;align-items:center;gap:7px;
   background:rgba(250,248,243,.96);backdrop-filter:blur(8px);border:0;
   border-bottom:1px solid var(--line);padding:11px 16px;font-size:12.5px;font-weight:700;
@@ -1410,19 +1408,12 @@ body.dp-open .detpane{display:block}
 .dp-cta .btn{flex:1;min-width:100px;text-align:center;justify-content:center;font-size:12.5px}
 
 /* 선택된 카드 강조 */
-.card[aria-current="true"]{border-color:var(--ink);box-shadow:0 6px 20px rgba(22,21,15,.13)}
+.card[aria-current="true"]{border-color:var(--accent);
+  box-shadow:0 0 0 2px var(--accent) inset, 0 8px 24px rgba(22,21,15,.14)}
 
-@media(max-width:1180px){
-  body.dp-open .splitwrap{grid-template-columns:minmax(0,1fr) minmax(0,380px)}
-  body.dp-open .grid{grid-template-columns:minmax(0,1fr)}
-}
-/* 모바일: 아래에서 올라오는 시트 */
+/* 좁은 화면: 여백만 줄인다. 배치는 넓은 화면과 같다(전체 폭) */
 @media(max-width:900px){
-  body.dp-open .splitwrap{grid-template-columns:minmax(0,1fr)}
-  body.dp-open .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .detpane.on{position:fixed;inset:0;z-index:1000;max-height:none;height:100%;
-    border:0;border-radius:0;overflow-y:auto}
-  body.dp-open{overflow:hidden}
+  .detpane.on{border-radius:12px;margin:14px 0 16px}
   .dp-close{padding:13px 16px;font-size:13.5px;min-height:46px}
   .dp-hero{aspect-ratio:16/10}
   .dp-htx h2{font-size:21px}
@@ -1435,11 +1426,9 @@ body.dp-open .detpane{display:block}
   gap:8px 16px;background:var(--band);border-radius:12px;font-size:13px}
 .nojs-list a{color:var(--body);text-decoration:underline;text-underline-offset:3px}
 
-/* 상세 패널: 카드 클릭 시 화면 상단에 붙도록 (스크롤 없이 바로 보이게) */
-@media(min-width:901px){
-  .detpane.on{top:calc(58px + 12px);max-height:calc(100vh - 84px)}
-  /* 상세가 열리면 목록을 위로 끌어올려 함께 보이게 */
-  body.dp-open .splitwrap{align-items:start}
+/* 넓은 화면에서 본문이 지나치게 넓어지지 않게 상한만 둔다 */
+@media(min-width:1500px){
+  .detpane.on{max-width:1240px;margin-left:auto;margin-right:auto}
 }
 
 /* ══════════════════════════════════════════════════════════
@@ -1456,17 +1445,9 @@ body.dp-open .detpane{display:block}
 .card-tip .ct-k{font-size:9px;margin-bottom:1px}
 .card-meta{padding-top:8px;font-size:11.5px}
 
-/* 상세 열렸을 때도 목록은 여러 열 유지 */
-body.dp-open .grid{grid-template-columns:repeat(auto-fill,minmax(190px,1fr))}
-@media(min-width:1400px){
-  body.dp-open .grid{grid-template-columns:repeat(auto-fill,minmax(210px,1fr))}
-}
-@media(max-width:1180px){
-  body.dp-open .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-}
+/* 상세가 열려도 목록 열 수는 그대로 — 상세가 목록 위에 따로 있기 때문 */
 @media(max-width:660px){
   .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
-  body.dp-open .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
   .card-fig{aspect-ratio:4/3}
   .card-body{padding:10px 11px 11px}
   .card-name{font-size:13.5px}
@@ -1592,14 +1573,10 @@ body.dp-open .grid{grid-template-columns:repeat(auto-fill,minmax(190px,1fr))}
   animation:dpSpin .7s linear infinite}
 @keyframes dpSpin{to{transform:rotate(360deg)}}
 
-/* 스크롤은 상세 칸(.detpane) 하나만 갖는다.
-   iframe 에 고정 높이를 주면 그 안에 두 번째 스크롤바가 생겨
-   내용이 좁은 칸에 갇힌 것처럼 보인다(사용자 신고 건). 그래서
-   iframe 은 postMessage 로 받은 '내용 전체 높이'만큼 늘어나게 두고,
-   화면을 넘치는 부분은 상세 칸이 스크롤한다.
-   ※ 폭은 .splitwrap 의 그리드가 정한다. 여기서 width 를 지정하면
-     분할 레이아웃이 깨지므로 건드리지 않는다. */
-.detpane.on{overflow-y:auto;-webkit-overflow-scrolling:touch}
+/* 상세는 페이지 흐름 안에 있으므로 자체 스크롤을 두지 않는다.
+   iframe 이 내용 전체 높이로 늘어나고, 페이지를 스크롤해서 읽는다.
+   (iframe 에 고정 높이를 주면 그 안에 두 번째 스크롤바가 생겨
+    내용이 좁은 칸에 갇힌 것처럼 보였던 문제가 있었다) */
 
 .dp-frame{overflow:visible;border-radius:0 0 16px 16px}
 /* height 는 JS 가 내용 높이로 지정한다. 아래 값은 로딩 중 임시값. */
