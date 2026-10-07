@@ -6,7 +6,9 @@
   --muted:#857E70; --line:#E2DBCC; --line-soft:#EDE7DA;
   --accent:#A6381D; --accent-soft:#F6EAE4; --indigo:#24405C;
   --serif:'Noto Serif KR','Noto Serif JP',Georgia,serif;
-  --sans:-apple-system,BlinkMacSystemFont,'Segoe UI','Apple SD Gothic Neo','Hiragino Sans','Noto Sans KR',sans-serif;
+  /* [FIXED] 영문 본문에 Inter 를 앞세운다. 라틴 글리프만 Inter 가 맡고
+     한글·가나는 뒤의 시스템 폰트가 그대로 처리한다(폴백 순서 활용). */
+  --sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI','Apple SD Gothic Neo','Hiragino Sans','Noto Sans KR',sans-serif;
   --wrap:1180px;
 }
 *{box-sizing:border-box}
@@ -602,9 +604,10 @@ dl{margin:14px 0 0}
   max-width:62ch;word-break:keep-all}
 
 .npost .dhead{max-width:760px;padding-bottom:10px}
-.npost .dhead h1{font-size:clamp(27px,3.6vw,40px);line-height:1.25;word-break:keep-all}
+.npost .dhead h1{font-size:clamp(27px,3.6vw,40px);line-height:1.25;word-break:keep-all;
+  overflow-wrap:anywhere}
 .npost .dhead .names{font-family:var(--sans);font-size:16px;line-height:1.8;
-  max-width:56ch;word-break:keep-all;color:var(--muted)}
+  max-width:56ch;word-break:keep-all;overflow-wrap:anywhere;color:var(--muted)}
 .npost-meta{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:18px;
   padding-top:14px;border-top:1px solid var(--line-soft);font-size:12.5px;color:var(--muted)}
 .npost-by{font-family:var(--serif);font-weight:600;color:var(--ink)}
@@ -612,6 +615,9 @@ dl{margin:14px 0 0}
 
 .nbody{max-width:720px;margin-top:34px}
 .nbody p{font-size:16.5px;line-height:1.95;color:var(--body);margin:0 0 20px;word-break:keep-all}
+/* 일본어 본문은 keep-all 로도 끊기지 않는 긴 어절(강조 <b> 안의 한 문장 등)이 생겨
+   좁은 화면에서 컨테이너를 밀어낸다. 필요할 때만 끊도록 anywhere 로 완화한다. */
+.nbody p,.nbody li,.nbody b,.nbody strong{overflow-wrap:anywhere}
 .nbody h2{font-family:var(--serif);font-size:clamp(19px,2.3vw,24px);line-height:1.4;
   font-weight:600;color:var(--ink);margin:44px 0 16px;word-break:keep-all}
 .nbody ul{margin:0 0 22px;padding-left:20px}
@@ -622,7 +628,10 @@ dl{margin:14px 0 0}
 .nbody .panel{background:var(--band);border:1px solid var(--line);border-radius:10px;
   padding:20px 22px;margin:0 0 24px}
 .nbody .panel p:last-child,.nbody .panel ul:last-child{margin-bottom:0}
-.nbody .tbl{width:100%;border-collapse:collapse;font-size:14.5px}
+/* 표: 긴 셀(날짜 나열 등)이 좁은 화면을 밀어내지 않도록 고정 레이아웃 + 강제 줄바꿈 */
+.nbody .tbl{width:100%;max-width:100%;border-collapse:collapse;font-size:14.5px;
+  table-layout:fixed}
+.nbody .tbl th,.nbody .tbl td{overflow-wrap:anywhere;word-break:break-word}
 .nbody .tbl th{text-align:left;font-size:11px;letter-spacing:.1em;text-transform:uppercase;
   color:var(--muted);font-weight:700;padding:0 12px 9px 0;border-bottom:1px solid var(--line)}
 .nbody .tbl td{padding:10px 12px 10px 0;border-bottom:1px solid var(--line-soft);
@@ -1344,4 +1353,281 @@ html[lang="en"] .dtext,html[lang="en"] .dhead h1{
   .dtop-tips{padding:11px 12px}
   .dtop-tips li{font-size:12px;padding-left:12px}
   .dtop-tips ul{min-width:0}
+}
+
+/* ══════════════════════════════════════════════════════════
+   상세 — 히어로 바로 아래, 화면 전체 폭
+   좌우 분할이나 뜨는 창을 쓰지 않는다(요청).
+   목록은 상세 아래에 그대로 남아 스크롤하면 이어서 보인다.
+   /spot/*.html 정식 페이지와 URL 은 그대로 유지된다.
+   ══════════════════════════════════════════════════════════ */
+.detwrap{padding:0 0 6px;background:var(--band);
+  border-bottom:1px solid var(--line)}
+.detwrap[hidden]{display:none}
+.detpane{display:none}
+body.dp-open .detpane{display:block}
+
+.detpane.on{position:relative;background:var(--paper);
+  border:1px solid var(--line);border-radius:16px;
+  margin:18px 0 20px;overflow:hidden}
+.dp-close{position:sticky;top:0;z-index:5;width:100%;display:flex;align-items:center;gap:7px;
+  background:rgba(250,248,243,.96);backdrop-filter:blur(8px);border:0;
+  border-bottom:1px solid var(--line);padding:11px 16px;font-size:12.5px;font-weight:700;
+  color:var(--muted);cursor:pointer}
+.dp-close:hover{color:var(--ink)}
+.dp-hero{position:relative;aspect-ratio:16/9;background:var(--line-soft)}
+.dp-hero img{width:100%;height:100%;object-fit:cover;display:block}
+.dp-hero::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(0,0,0,.3) 0%,rgba(0,0,0,0) 44%,rgba(0,0,0,.62) 100%)}
+.dp-htx{position:absolute;left:0;right:0;bottom:0;padding:15px 18px;z-index:2}
+.dp-badge{display:inline-block;background:var(--accent);color:#fff;font-size:9.5px;
+  font-weight:700;padding:3px 9px;border-radius:999px;margin-bottom:7px}
+.dp-htx h2{color:#fff;font-size:20px;line-height:1.26;text-shadow:0 2px 12px rgba(0,0,0,.55);
+  word-break:keep-all}
+.dp-ja{color:rgba(255,255,255,.84);font-size:11.5px;margin-top:4px;font-family:var(--serif);
+  text-shadow:0 1px 8px rgba(0,0,0,.6)}
+.dp-body{padding:15px 17px 19px}
+.dp-facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:1px;
+  margin:0;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.dp-facts>div{background:var(--paper);padding:8px 11px;min-width:0}
+.dp-facts dt{font-size:8.5px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--muted);font-weight:700}
+.dp-facts dd{margin:2px 0 0;font-size:12px;color:var(--ink);font-weight:600;
+  line-height:1.4;word-break:keep-all;overflow-wrap:anywhere}
+.dp-sec{margin-top:14px}
+.dp-sec h3{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);
+  font-weight:700;margin:0 0 7px}
+.dp-tips{display:grid;gap:6px}
+.dp-tip{display:grid;grid-template-columns:28px minmax(0,1fr);gap:9px;background:var(--band);
+  border-radius:9px;padding:10px 12px}
+.dp-tip .ic{width:28px;height:28px;border-radius:6px;background:var(--accent);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:13px}
+.dp-tip b{font-size:12.5px;color:var(--ink);display:block;line-height:1.4;word-break:keep-all}
+.dp-tip p{margin:3px 0 0;font-size:11.5px;line-height:1.62;color:var(--body);
+  word-break:keep-all;overflow-wrap:anywhere}
+.dp-desc{font-size:12.5px;line-height:1.75;color:var(--body);word-break:keep-all;margin:0}
+.dp-cta{display:flex;gap:7px;margin-top:15px;flex-wrap:wrap}
+.dp-cta .btn{flex:1;min-width:100px;text-align:center;justify-content:center;font-size:12.5px}
+
+/* 선택된 카드 강조 */
+.card[aria-current="true"]{border-color:var(--accent);
+  box-shadow:0 0 0 2px var(--accent) inset, 0 8px 24px rgba(22,21,15,.14)}
+
+/* 좁은 화면: 여백만 줄인다. 배치는 넓은 화면과 같다(전체 폭) */
+@media(max-width:900px){
+  .detpane.on{border-radius:12px;margin:14px 0 16px}
+  .dp-close{padding:13px 16px;font-size:13.5px;min-height:46px}
+  .dp-hero{aspect-ratio:16/10}
+  .dp-htx h2{font-size:21px}
+  .dp-body{padding:15px 16px 26px}
+  .dp-cta .btn{flex:1 1 100%;min-height:46px;display:inline-flex;align-items:center}
+}
+
+/* JS 미실행 환경용 스팟 링크 목록 (크롤러 도달 경로 확보) */
+.nojs-list{list-style:none;margin:20px 0 0;padding:16px 18px;display:flex;flex-wrap:wrap;
+  gap:8px 16px;background:var(--band);border-radius:12px;font-size:13px}
+.nojs-list a{color:var(--body);text-decoration:underline;text-underline-offset:3px}
+
+/* 넓은 화면에서 본문이 지나치게 넓어지지 않게 상한만 둔다 */
+@media(min-width:1500px){
+  .detpane.on{max-width:1240px;margin-left:auto;margin-right:auto}
+}
+
+/* ══════════════════════════════════════════════════════════
+   한 페이지에서 전체 보기
+   65곳을 3페이지로 나누던 것을 한 번에 표시하고,
+   카드를 조밀하게 만들어 스크롤을 줄인다.
+   ══════════════════════════════════════════════════════════ */
+.grid{grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:16px}
+.card-fig{aspect-ratio:3/2}          /* 4:3 → 3:2 로 낮춰 카드 높이 축소 */
+.card-body{padding:11px 13px 12px}
+.card-name{font-size:15px;line-height:1.3}
+.card-jp{font-size:10.5px;margin-top:2px}
+.card-tip{margin-top:8px;font-size:11.5px;line-height:1.5;-webkit-line-clamp:2}
+.card-tip .ct-k{font-size:9px;margin-bottom:1px}
+.card-meta{padding-top:8px;font-size:11.5px}
+
+/* 상세가 열려도 목록 열 수는 그대로 — 상세가 목록 위에 따로 있기 때문 */
+@media(max-width:660px){
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+  .card-fig{aspect-ratio:4/3}
+  .card-body{padding:10px 11px 11px}
+  .card-name{font-size:13.5px}
+  .card-tip{font-size:11px;-webkit-line-clamp:2}
+}
+/* 페이저는 전체 표시이므로 숨김 */
+.pager:empty{display:none}
+
+/* 「더 보기」 버튼 — 페이지 넘김 대신 누적 표시 */
+.btn-more{background:none;border:1.5px solid var(--ink);border-radius:999px;cursor:pointer;
+  font-size:13.5px;font-weight:700;color:var(--ink);padding:13px 30px;
+  transition:background .18s,color .18s;display:inline-flex;align-items:center;gap:6px}
+.btn-more:hover{background:var(--ink);color:var(--paper)}
+.btn-more b{font-variant-numeric:tabular-nums}
+.btn-more span{font-weight:500;opacity:.6;font-size:12px}
+.pager{display:flex;justify-content:center;margin-top:26px}
+.pager:empty{display:none;margin:0}
+@media (hover:none) and (pointer:coarse){ .btn-more{min-height:48px} }
+
+/* ══════════════════════════════════════════════════════════
+   상세 표시 방식 변경 — 2단 분할 → 화면 중앙 오버레이
+   기존 문제: 오른쪽 열이 화면 하단에서 시작해 클릭해도 눈에 안 띔
+   개선: 클릭 즉시 화면 한가운데에 표시. 목록은 뒤에 흐리게 남는다.
+   ══════════════════════════════════════════════════════════ */
+
+/* ── 분할 화면 확정 ────────────────────────────────────────
+   요청: "메인 화면과 상세를 한 페이지에서 동시에".
+   이전에는 여기서 중앙 모달로 되돌리고 있었다(새 창처럼 보이던 원인).
+   이제 왼쪽 목록 + 오른쪽 상세를 나란히 두고, 딤·모달을 쓰지 않는다.
+   ══════════════════════════════════════════════════════════ */
+
+/* 선택한 카드가 어느 것인지 확실히 보이게 */
+.card[aria-current="true"]{border-color:var(--accent);
+  box-shadow:0 0 0 2px var(--accent) inset, 0 8px 24px rgba(22,21,15,.14)}
+
+/* 상세 안쪽 여백·타이포 (분할 폭에 맞춘 값) */
+.dp-facts{grid-template-columns:repeat(auto-fit,minmax(130px,1fr))}
+.dp-tips{grid-template-columns:minmax(0,1fr)}
+.dp-body{padding:16px 18px 22px}
+.dp-htx h2{font-size:21px}
+@media(min-width:1400px){
+  .dp-tips{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .dp-htx h2{font-size:23px}
+}
+
+/* ══════════════════════════════════════════════════════════
+   히어로 정리 — 통계칩·검색창·CC문구 제거 후 재배치
+   CC 고지는 푸터에 이미 있으므로 히어로에서는 뺀다(중복 제거).
+   ══════════════════════════════════════════════════════════ */
+.hcard{padding:24px 26px 22px}
+.hcard-cats{margin-top:18px}
+
+/* 모바일: 히어로를 컴팩트하게, 사이드 패널을 위로 */
+@media(max-width:900px){
+  .hero{padding:14px 0 16px}
+  .hero-grid{gap:12px}
+  .hcard{padding:18px 16px 16px;border-radius:14px;box-shadow:3px 3px 0 rgba(22,21,15,.08)}
+  .hcard-tag{font-size:9.5px;padding:5px 11px;letter-spacing:.08em}
+  .hcard-h1{font-size:22px;line-height:1.28;margin-top:12px}
+  .hcard-sub{font-size:13px;line-height:1.6;margin-top:9px;
+    display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+  .hcard-cats{margin-top:13px;gap:6px}
+  .hcat{font-size:11.5px;padding:7px 12px}
+  /* 사이드 패널을 세로로 쌓되 여백 최소화 */
+  .hside{flex-direction:column;gap:10px}
+  .hpanel{padding:13px 14px;border-radius:13px}
+  .hpanel-hd{font-size:12px;margin-bottom:9px}
+  .qzone{gap:5px}
+  .qz{padding:8px 2px 6px}
+  .qz b{font-size:14px}
+  .qz span{font-size:8px}
+  .hot-row{padding:7px 5px}
+  .hot-th{width:50px;height:40px}
+  .hot-tx b{font-size:12.5px}
+  .hot-tx i{font-size:10px}
+  .hot-pr{font-size:10.5px;padding:3px 8px}
+}
+@media(max-width:400px){
+  .hcard-h1{font-size:20px}
+  .hcard-sub{font-size:12.5px;-webkit-line-clamp:3}
+  .hcat{font-size:11px;padding:7px 11px}
+}
+
+/* ══════════════════════════════════════════════════════════
+   세로 간격 정리 — 계측으로 확인된 과다 여백 축소
+   pager 위 66px, 푸터 앞 96px, results-bar 72px 이 원인이었다.
+   ══════════════════════════════════════════════════════════ */
+.pager{padding-top:0;margin-top:22px}
+#spots{padding-bottom:26px}
+.ftr{padding-top:28px}
+
+@media(max-width:900px){
+  .hero{padding:12px 0 12px}
+  .hero-grid{gap:10px}
+  .hside{gap:8px}
+  .results-bar{padding:9px 0 8px;margin-top:0}
+  .pager{margin-top:16px}
+  #spots{padding-bottom:18px}
+  .ftr{padding-top:22px;padding-bottom:26px}
+  .ftr-line{gap:12px}
+  .ftr-links{gap:12px 16px}
+  .ftr-btm{margin-top:16px;padding-top:14px;line-height:1.7}
+  .wardsum{padding:10px 20px;min-height:42px}
+  .filters .frow{padding:7px 0}
+}
+@media(max-width:400px){
+  .hero{padding:10px 0 10px}
+  .ftr-links{gap:10px 14px;font-size:12.5px}
+}
+
+/* ══════════════════════════════════════════════════════════
+   iframe 임베드 상세
+   상세 페이지 전체 내용을 그대로 불러온다(embed/ 전용본).
+   높이는 자식이 postMessage 로 알려 스크롤바 이중화를 막는다.
+   ══════════════════════════════════════════════════════════ */
+.dp-frame{position:relative;background:var(--paper);min-height:240px}
+.dp-frame iframe{display:block;width:100%;border:0;height:60vh;
+  transition:height .18s ease;background:var(--paper)}
+.dp-load{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  background:var(--paper);z-index:2}
+.dp-load::after{content:"";width:26px;height:26px;border-radius:50%;
+  border:2.5px solid var(--line);border-top-color:var(--accent);
+  animation:dpSpin .7s linear infinite}
+@keyframes dpSpin{to{transform:rotate(360deg)}}
+
+/* 상세는 페이지 흐름 안에 있으므로 자체 스크롤을 두지 않는다.
+   iframe 이 내용 전체 높이로 늘어나고, 페이지를 스크롤해서 읽는다.
+   (iframe 에 고정 높이를 주면 그 안에 두 번째 스크롤바가 생겨
+    내용이 좁은 칸에 갇힌 것처럼 보였던 문제가 있었다) */
+
+.dp-frame{overflow:visible;border-radius:0 0 16px 16px}
+/* height 는 JS 가 내용 높이로 지정한다. 아래 값은 로딩 중 임시값. */
+.dp-frame iframe{height:auto;min-height:52vh}
+@media(max-width:900px){
+  .dp-frame{border-radius:0}
+}
+
+/* 닫기 버튼은 스크롤해도 항상 손 닿는 곳에 둔다 */
+.dp-close{position:sticky;top:0;z-index:5}
+
+/* ══════════════════════════════════════════════════════════
+   [FIXED] 터치 타깃 44×44 최종 보정 (v3.0 감사)
+   실측(iPhone SE 375 / iPhone 14 390, has_touch)에서 44px 에
+   미달한 9개를 정확히 겨냥한다. 데스크톱 레이아웃은 건드리지 않는다.
+     언어전환 KO/JA/EN  28×44 → 가로 부족
+     푸터 소개/문의     28×45 → 가로 부족
+     전체 보기          55×29 → 세로 부족
+     더 보기            43×23 → 세로 부족
+     워드마크(로고)     164×35 → 세로 부족
+   ══════════════════════════════════════════════════════════ */
+@media (hover:none) and (pointer:coarse){
+  /* 언어 전환 — 가로 44 확보 */
+  .lang a,.lang button{min-width:44px;min-height:44px;
+    display:inline-flex;align-items:center;justify-content:center}
+  /* 헤더·푸터 링크 — 짧은 글자('소개','문의')도 44 확보 */
+  .hdr-nav a,.ftr-links a{min-width:44px;min-height:44px;
+    display:inline-flex;align-items:center;justify-content:center}
+  /* 사이드 패널 '전체 보기' */
+  .hpanel-hd a,.hpanel-hd button{min-height:44px;
+    display:inline-flex;align-items:center}
+  /* '더 보기' (사이드 gemMore 포함) */
+  #gemMore,.btn-more{min-height:44px;
+    display:inline-flex;align-items:center;justify-content:center}
+  /* 로고 */
+  .wordmark{min-height:44px;display:inline-flex;align-items:center}
+  /* 구 칩의 ↗ 링크 */
+  .wchip-a{min-width:44px;min-height:44px}
+  /* 상세 닫기 */
+  .dp-close{min-height:48px}
+}
+
+/* [FIXED] 터치 잔여 2건 마무리
+   ① #gemMore — 가로 43px 로 1px 부족했다. 버튼이므로 44 확보.
+   ② 푸터 본문 속 '문의 페이지' — 문장 중간의 인라인 링크다.
+      여기에 min-height:44px 를 주면 줄 높이가 깨져 문단이 망가진다.
+      대신 상하 패딩으로 실제 터치 영역만 넓힌다(WCAG 2.5.5 대안 충족). */
+@media (hover:none) and (pointer:coarse){
+  #gemMore{min-width:44px;padding-left:10px;padding-right:10px}
+  .ftr-note a,.ftr p a{padding:15px 2px;margin:-15px 0;
+    display:inline-block;line-height:1.2}
 }

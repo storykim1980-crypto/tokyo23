@@ -1,0 +1,59 @@
+name: 월간 정보점검 (Monthly Info Check)
+
+# 매월 1일 06:00 JST (= 21:00 UTC 전일) 자동 실행 + 수동 실행
+on:
+  schedule:
+    - cron: "0 21 1 * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: monthly-info-check
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: 의존성 설치
+        run: pip install requests beautifulsoup4
+
+      - name: ① 외부 링크 상태 점검
+        continue-on-error: true
+        run: REPORT_DIR=artifacts python3 tools/check_links.py .
+
+      - name: ② 추적 소스 사이트 점검
+        continue-on-error: true
+        run: REPORT_DIR=artifacts python3 tools/check_sources.py
+
+      - name: ③ 공식 사이트 변경 시그널 스캔
+        continue-on-error: true
+        run: REPORT_DIR=artifacts python3 tools/crawl_official.py --repo . --out artifacts
+
+      - name: ④ 리포트 종합
+        run: REPORT_DIR=artifacts python3 tools/digest.py
+
+      - name: 리포트 아티팩트 업로드
+        uses: actions/upload-artifact@v4
+        with:
+          name: monthly-report
+          path: artifacts/
+          retention-days: 90
+
+      - name: 이슈 생성(점검 알림)
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        uses: peter-evans/create-issue-from-file@v5
+        with:
+          title: "월간 정보점검 리포트 — ${{ github.run_id }}"
+          content-filepath: artifacts/monthly_report.md
+          labels: info-check
