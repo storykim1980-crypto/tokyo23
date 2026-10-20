@@ -1,0 +1,32 @@
+name: Monthly Spot Official Status Audit
+
+on:
+  schedule:
+    - cron: '0 0 1 * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  audit-spots:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Run monthly 74-spot official URL & SSL check
+        run: python3 tools/monthly_check.py
+
+      - name: Upload monthly audit report artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: tokyo23-monthly-audit-report
+          path: tools/reports/latest_monthly_report.md
+          retention-days: 90
