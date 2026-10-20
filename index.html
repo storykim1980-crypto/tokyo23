@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>도쿄 23구 이색 스팟 74곳 | 현지인의 주문법·암묵의 규칙까지</title>
+<title>도쿄 23구 현지인만 아는 이색 스팟 | 현지인의 주문법·암묵의 규칙까지</title>
 <meta name="description" content="가이드북이 다루지 않는 도쿄 23구 74곳. 어디를 가느냐뿐 아니라 현지인들이 말하지 않는 주문의 요령과 암묵의 규칙까지 한국어·일본어·영어로 정리했습니다.">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <meta property="og:locale:alternate" content="ja_JP">
@@ -15,13 +15,13 @@
 <link rel="canonical" href="https://tokyo23-guide.com/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="TOKYO 23">
-<meta property="og:title" content="도쿄 23구 이색 스팟 74곳 | 현지인의 주문법·암묵의 규칙까지">
+<meta property="og:title" content="도쿄 23구 현지인만 아는 이색 스팟 | 현지인의 주문법·암묵의 규칙까지">
 <meta property="og:description" content="가이드북이 다루지 않는 도쿄 23구 74곳. 어디를 가느냐뿐 아니라 현지인들이 말하지 않는 주문의 요령과 암묵의 규칙까지 한국어·일본어·영어로 정리했습니다.">
 <meta property="og:url" content="https://tokyo23-guide.com/">
 <meta property="og:image" content="https://tokyo23-guide.com/assets/og-default.jpg">
 <meta property="og:locale" content="ko_KR">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="도쿄 23구 이색 스팟 74곳 | 현지인의 주문법·암묵의 규칙까지">
+<meta name="twitter:title" content="도쿄 23구 현지인만 아는 이색 스팟 | 현지인의 주문법·암묵의 규칙까지">
 <meta name="twitter:description" content="가이드북이 다루지 않는 도쿄 23구 74곳. 어디를 가느냐뿐 아니라 현지인들이 말하지 않는 주문의 요령과 암묵의 규칙까지 한국어·일본어·영어로 정리했습니다.">
 <meta name="twitter:image" content="https://tokyo23-guide.com/assets/og-default.jpg">
 <meta name="theme-color" content="#FAF8F3">
@@ -43,8 +43,8 @@
 <div class="hero-grid">
 
 <div class="hcard">
-<div class="hcard-tag">2026 LOCAL ONLY &nbsp;·&nbsp; 74 SPOTS &nbsp;·&nbsp; 23 WARDS</div>
-<h1 class="hcard-h1" data-mlh data-ko="도쿄 23구 현지인만 아는&lt;br&gt;&lt;em&gt;이색 스팟 74곳&lt;/em&gt;" data-ja="東京23区 地元だけが知る&lt;br&gt;&lt;em&gt;変わったスポット74か所&lt;/em&gt;" data-en="Known Only to Locals&lt;br&gt;&lt;em&gt;74 Offbeat Places in Tokyo&lt;/em&gt;">도쿄 23구 현지인만 아는<br><em>이색 스팟 74곳</em></h1>
+<div class="hcard-tag">2026 LOCAL ONLY &nbsp;·&nbsp; TOKYO 23 WARDS</div>
+<h1 class="hcard-h1" data-mlh data-ko="도쿄 23구 현지인만 아는&lt;br&gt;&lt;em&gt;이색 스팟&lt;/em&gt;" data-ja="東京23区 地元だけが知る&lt;br&gt;&lt;em&gt;変わったスポット&lt;/em&gt;" data-en="Known Only to Locals&lt;br&gt;&lt;em&gt;Offbeat Places in Tokyo&lt;/em&gt;">도쿄 23구 현지인만 아는<br><em>이색 스팟</em></h1>
 <p class="hcard-sub" data-i18n="heroSub">가이드북에 없는 골목 미식, 쇼와 레트로, 심야 술집, 서브컬처. 어디를 가느냐보다 어떻게 주문하고 어떻게 행동하느냐를 정리했습니다.</p>
 <div class="hcard-cats"><button type="button" class="hcat" data-cat="gourmet" aria-pressed="false"><span data-ml data-ko="골목 미식" data-ja="路地裏グルメ" data-en="Alley Gourmet">골목 미식</span></button><button type="button" class="hcat" data-cat="retro" aria-pressed="false"><span data-ml data-ko="쇼와 레트로" data-ja="昭和レトロ" data-en="Showa Retro">쇼와 레트로</span></button><button type="button" class="hcat" data-cat="night" aria-pressed="false"><span data-ml data-ko="심야·술집" data-ja="深夜・酒場" data-en="Night &amp; Bars">심야·술집</span></button><button type="button" class="hcat" data-cat="subculture" aria-pressed="false"><span data-ml data-ko="서브컬처" data-ja="サブカル" data-en="Subculture">서브컬처</span></button><button type="button" class="hcat" data-cat="urban" aria-pressed="false"><span data-ml data-ko="도시탐험" data-ja="都市探検" data-en="Urban Walk">도시탐험</span></button></div>
 </div>
@@ -369,7 +369,7 @@
   window.addEventListener('resize',function(){
     if(window.innerWidth>860) closeMenu();
   });
-  window.addEventListener('pageshow',closeMenu);
+  window.addEventListener('pageshow',function(e){if(e.persisted)closeMenu();});
   window.addEventListener('hashchange',closeMenu);
 })();</script>
 </body></html>

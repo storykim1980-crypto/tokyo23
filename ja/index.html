@@ -43,8 +43,8 @@
 <div class="hero-grid">
 
 <div class="hcard">
-<div class="hcard-tag">2026 LOCAL ONLY &nbsp;·&nbsp; 74 SPOTS &nbsp;·&nbsp; 23 WARDS</div>
-<h1 class="hcard-h1" data-mlh data-ko="도쿄 23구 현지인만 아는&lt;br&gt;&lt;em&gt;이색 스팟 74곳&lt;/em&gt;" data-ja="東京23区 地元だけが知る&lt;br&gt;&lt;em&gt;変わったスポット74か所&lt;/em&gt;" data-en="Known Only to Locals&lt;br&gt;&lt;em&gt;74 Offbeat Places in Tokyo&lt;/em&gt;">東京23区 地元だけが知る<br><em>変わったスポット74か所</em></h1>
+<div class="hcard-tag">2026 LOCAL ONLY &nbsp;·&nbsp; TOKYO 23 WARDS</div>
+<h1 class="hcard-h1" data-mlh data-ko="도쿄 23구 현지인만 아는&lt;br&gt;&lt;em&gt;이색 스팟&lt;/em&gt;" data-ja="東京23区 地元だけが知る&lt;br&gt;&lt;em&gt;変わったスポット&lt;/em&gt;" data-en="Known Only to Locals&lt;br&gt;&lt;em&gt;Offbeat Places in Tokyo&lt;/em&gt;">東京23区 地元だけが知る<br><em>変わったスポット</em></h1>
 <p class="hcard-sub" data-i18n="heroSub">ガイドブックに載らない路地裏グルメ、昭和レトロ、深夜酒場、サブカル。どこへ行くかより、どう頼み、どう振る舞うかをまとめました。</p>
 <div class="hcard-cats"><button type="button" class="hcat" data-cat="gourmet" aria-pressed="false"><span data-ml data-ko="골목 미식" data-ja="路地裏グルメ" data-en="Alley Gourmet">路地裏グルメ</span></button><button type="button" class="hcat" data-cat="retro" aria-pressed="false"><span data-ml data-ko="쇼와 레트로" data-ja="昭和レトロ" data-en="Showa Retro">昭和レトロ</span></button><button type="button" class="hcat" data-cat="night" aria-pressed="false"><span data-ml data-ko="심야·술집" data-ja="深夜・酒場" data-en="Night &amp; Bars">深夜・酒場</span></button><button type="button" class="hcat" data-cat="subculture" aria-pressed="false"><span data-ml data-ko="서브컬처" data-ja="サブカル" data-en="Subculture">サブカル</span></button><button type="button" class="hcat" data-cat="urban" aria-pressed="false"><span data-ml data-ko="도시탐험" data-ja="都市探検" data-en="Urban Walk">都市探検</span></button></div>
 </div>
@@ -57,13 +57,13 @@
 <div class="hpanel">
 <div class="hpanel-hd"><span data-i18n="sideHot">ここでしか見られない場所</span><button type="button" id="gemMore" data-i18n="sideMore">もっと見る</button></div>
 <div class="hotlist"><a class="hot-row" href="/ja/spot/001-sumatra-curry-kyoeido.html">
-<span class="hot-th"><img src="/images/spots/spot_001_chiyoda_curry_kyoeido.jpg" alt="スマトラカレー 共栄堂" data-ml-attr="alt" data-ko="스마트라 카레 교에이도" data-ja="スマトラカレー 共栄堂" data-en="Sumatra Curry Kyoeido" loading="lazy" width="120" height="90">スマトラカレー 共栄堂</i></span>
+<span class="hot-th"><img src="/images/spots/spot_001_chiyoda_curry_kyoeido.jpg" alt="スマトラカレー 共栄堂" loading="lazy" width="120" height="90"></span><span class="hot-tx"><b>スマトラカレー 共栄堂</b><i>千代田区 · 路地裏グルメ</i></span>
 <span class="hot-pr" data-ml data-ko="¥1,100~1,500" data-ja="¥1,100~1,500" data-en="¥1,100~1,500">¥1,100~1,500</span>
 </a><a class="hot-row" href="/ja/spot/003-ladrio.html">
-<span class="hot-th"><img src="/images/spots/spot_003_chiyoda_ladio.jpg" alt="ラドリオ" data-ml-attr="alt" data-ko="라도리오" data-ja="ラドリオ" data-en="Ladrio" loading="lazy" width="120" height="90">ラドリオ</i></span>
+<span class="hot-th"><img src="/images/spots/spot_003_chiyoda_ladio.jpg" alt="ラドリオ" loading="lazy" width="120" height="90"></span><span class="hot-tx"><b>ラドリオ</b><i>千代田区 · 昭和レトロ</i></span>
 <span class="hot-pr" data-ml data-ko="¥600~900" data-ja="¥600~900" data-en="¥600~900">¥600~900</span>
 </a><a class="hot-row" href="/ja/spot/004-milonga-nueva.html">
-<span class="hot-th"><img src="/images/spots/spot_004_chiyoda_milonga.jpg" alt="ミロンガ・ヌオーバ" data-ml-attr="alt" data-ko="밀롱가 누오바" data-ja="ミロンガ・ヌオーバ" data-en="Milonga Nueva" loading="lazy" width="120" height="90">ミロンガ・ヌオーバ</i></span>
+<span class="hot-th"><img src="/images/spots/spot_004_chiyoda_milonga.jpg" alt="ミロンガ・ヌオーバ" loading="lazy" width="120" height="90"></span><span class="hot-tx"><b>ミロンガ・ヌオーバ</b><i>千代田区 · 昭和レトロ</i></span>
 <span class="hot-pr" data-ml data-ko="¥700~1,200" data-ja="¥700~1,200" data-en="¥700~1,200">¥700~1,200</span>
 </a></div>
 </div>
@@ -363,7 +363,7 @@
   window.addEventListener('resize',function(){
     if(window.innerWidth>860) closeMenu();
   });
-  window.addEventListener('pageshow',closeMenu);
+  window.addEventListener('pageshow',function(e){if(e.persisted)closeMenu();});
   window.addEventListener('hashchange',closeMenu);
 })();</script>
 </body></html>

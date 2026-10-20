@@ -265,7 +265,7 @@
   window.addEventListener('resize',function(){
     if(window.innerWidth>860) closeMenu();
   });
-  window.addEventListener('pageshow',closeMenu);
+  window.addEventListener('pageshow',function(e){if(e.persisted)closeMenu();});
   window.addEventListener('hashchange',closeMenu);
 })();</script>
 </body></html>
